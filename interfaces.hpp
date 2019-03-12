@@ -13,13 +13,16 @@ public:
 	virtual ~IMathFunction() = default;
 };
 
-struct PluginInfo
-{
-	const char* name;
-	const char* version;
-	const char* pluginList [];
+// class PluginManager
+
+struct IPluginInfo{
+	/** Get Plugin Name */
+	virtual const char* Name() const = 0 ;
+	/** Get Plugin Version */
+	virtual const char* Version() const = 0;
+	/** Instantiate a class from its name */
+	virtual void* Factory(const char* className) const = 0;
 };
 
-// class PluginManager
 
 #endif 
