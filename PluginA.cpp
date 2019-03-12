@@ -1,6 +1,5 @@
 #include <iostream>
 #include <cmath>
-
 #include <psdk/factory.hpp>
 
 class IMathFunction
