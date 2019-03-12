@@ -20,11 +20,17 @@ using pstring = std::string;
 class Plugin
 {	
 public:
-	void* m_hnd = nullptr;
-	std::string m_file = "";
-	bool m_isLoaded    = false;
+	// Function pointer to DLL entry-point
+	using GetPluginInfo_fp = IPluginInfo* (*) ();
 
-	Plugin(){}
+	void*        m_hnd		= nullptr;
+	std::string  m_file		= "";
+	bool         m_isLoaded = false;
+	IPluginInfo* m_info     = nullptr;
+
+	Plugin()
+	{
+	}
 
 	explicit Plugin(std::string file)
 	{
@@ -32,6 +38,10 @@ public:
 		m_hnd = ::dlopen(m_file.c_str(), RTLD_LAZY);
 		m_isLoaded = true;
 		assert(m_hnd != nullptr);
+
+		auto dllEntryPoint = reinterpret_cast<GetPluginInfo_fp>(dlsym(m_hnd, "GetPluginInfo"));
+		assert(dllEntryPoint != nullptr);
+		m_info = dllEntryPoint();
 	}
 
 	~Plugin()
@@ -46,14 +56,26 @@ public:
 		m_isLoaded	= std::move(rhs.m_isLoaded);
 		m_hnd		= std::move(rhs.m_hnd);
 		m_file		= std::move(rhs.m_file);
+		m_info      = std::move(rhs.m_info);
 	} 
 	Plugin& operator=(Plugin&& rhs)
 	{
 		std::swap(rhs.m_isLoaded, m_isLoaded);
 		std::swap(rhs.m_hnd,  m_hnd);
 		std::swap(rhs.m_file, m_file);
+		std::swap(rhs.m_info, m_info);
 		return *this;
-	} 
+	}
+
+	IPluginInfo* GetInfo() const
+	{
+		return m_info;
+	}
+
+	void* GetObject(std::string const& className)
+	{
+		return m_info->Factory(className.c_str());
+	}
 
 	bool isLoaded() const
 	{
