@@ -10,10 +10,10 @@ add_executable(main main.cpp)
 target_include_directories(main PUBLIC ".")
 # Note: the library ldl is necessary for the UNIX APIs dlopen,
 # dlclose, ... and so on
-target_link_libraries(main PRIVATE dl)
-set_target_properties(main PROPERTIES
-  SUFFIX ".bin"
-  )
+if(UNIX)
+  target_link_libraries(main PRIVATE dl)
+  set_target_properties(main PROPERTIES SUFFIX ".bin")
+endif()  
 
 
 # >>> ---- Target: PluginA ----------------
@@ -23,6 +23,10 @@ set_target_properties(PluginA PROPERTIES
   PREFIX ""
   )
 
-install( TARGETS main PluginA
-         DESTINATION "./"
-  )
+# If not set the install directory, attemp set the install directory
+# CMAKE_INSTALL_PREFIX to the directory ./bin 
+if(NOT DEFINED CMAKE_INSTALL_PREFIX OR CMAKE_INSTALL_PREFIX MATCHES "")
+  set(CMAKE_INSTALL_PREFIX  ${CMAKE_CURRENT_LIST_DIR}/bin)
+endif()
+
+install( TARGETS main PluginA DESTINATION ".")
