@@ -6,6 +6,16 @@
 #include <map> 
 #include "interfaces.hpp"
 
+
+/** Macro EXPORT_CPP makes a symbol visible. */
+#if defined(_WIN32)
+  // MS-Windows NT 
+  #define PSDK_PLUGIN_EXPORT_C extern "C" __declspec(dllexport) 
+#else
+  // Unix-like OSes
+  #define PSDK_PLUGIN_EXPORT_C extern "C" __attribute__ ((visibility ("default")))
+#endif 
+
 class PluginInfo: public IPluginInfo
 {
 public:

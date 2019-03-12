@@ -45,7 +45,7 @@ public:
 // ===== Factory Function - Plugin EntryPoint ==== //
 
 
-extern "C"
+PSDK_PLUGIN_EXPORT_C
 auto GetPluginInfo() -> PluginInfo*
 {
 
