@@ -1,8 +1,7 @@
-
-#include "interfaces.hpp"
 #include <iostream>
 #include <cmath>
 
+#include "factory.hpp"
 
 // Forward declarations 
 // class Exp; // : public IMathFunction;
@@ -36,16 +35,20 @@ public:
 
 // ===== Factory Function - Plugin EntryPoint ==== //
 
+
 extern "C"
-auto factoryFunction(const char* className) -> void*
+auto GetPluginInfo() -> PluginInfo*
 {
-	auto name = std::string(className);
-	if(name == "Exp")
-		return new (std::nothrow) Exp;
-	if(name == "Log")
-		return new (std::nothrow) Log;	
-	return nullptr;
+
+	static PluginInfo pinfo = []{
+		auto p = PluginInfo("PluginA", "0.1-alpha");
+		p.registerClass<Exp>("Exp");
+		p.registerClass<Log>("Log");
+		return p;
+	}();
+	return &pinfo;
 }
+
 
 struct _DLLInit{
 	_DLLInit(){
