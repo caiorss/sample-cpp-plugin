@@ -49,10 +49,10 @@ public:
 		assert(m_hnd != nullptr);
         #if !defined(_WIN32)
 		  auto dllEntryPoint =
-			  reinterpret_cast<GetPluginInfo_fp>(dlsym(m_hnd, "GetPluginInfo"));
+			  reinterpret_cast<GetPluginInfo_fp>(dlsym(m_hnd, "GetPluginFactory"));
 		#else
 		  auto dllEntryPoint =
-			  reinterpret_cast<GetPluginInfo_fp>(GetProcAddress((HMODULE) m_hnd, "GetPluginInfo"));
+			  reinterpret_cast<GetPluginInfo_fp>(GetProcAddress((HMODULE) m_hnd, "GetPluginFactory"));
         #endif 
 		assert(dllEntryPoint != nullptr);
 		// Retrieve plugin metadata from DLL entry-point function 
@@ -143,7 +143,7 @@ public:
 		return m_plugindb[name].GetInfo();
 	}
 
-	IPluginFactory* GetPluginInfo(const char* pluginName)
+	IPluginFactory* GetPluginFactory(const char* pluginName)
 	{
 		auto it = m_plugindb.find(pluginName);
 		if(it == m_plugindb.end())

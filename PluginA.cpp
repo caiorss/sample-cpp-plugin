@@ -45,7 +45,7 @@ public:
 
 
 PSDK_PLUGIN_EXPORT_C
-auto GetPluginInfo() -> IPluginFactory*
+auto GetPluginFactory() -> IPluginFactory*
 {
 
 	static PluginFactory pinfo = []{
