@@ -3,3 +3,7 @@
 *.exe
 *.il
 *.dll
+build/*
+bin/*
+build*/*
+*.obj

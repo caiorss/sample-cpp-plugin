@@ -1,7 +1,14 @@
-
-#include "interfaces.hpp"
 #include <iostream>
 #include <cmath>
+#include <psdk/factory.hpp>
+
+class IMathFunction
+{
+public:
+	virtual const char* Name() const = 0;
+	virtual double  Eval(double x) const = 0;	
+	virtual ~IMathFunction() = default;
+};
 
 
 // Forward declarations 
@@ -14,7 +21,7 @@ class Exp: public IMathFunction
 {
 public:
 	Exp() = default;
-	pstring Name() const {
+	const char* Name() const {
 		return "Exp";
 	}
 	double Eval(double x) const {
@@ -26,7 +33,7 @@ class Log: public IMathFunction
 {
 public:
 	Log() = default;
-	pstring Name() const {
+	const char* Name() const {
 		return "Log";
 	}
 	double Eval(double x) const {
@@ -36,16 +43,20 @@ public:
 
 // ===== Factory Function - Plugin EntryPoint ==== //
 
-extern "C"
-auto factoryFunction(const char* className) -> void*
+
+PSDK_PLUGIN_EXPORT_C
+auto GetPluginInfo() -> PluginInfo*
 {
-	auto name = std::string(className);
-	if(name == "Exp")
-		return new (std::nothrow) Exp;
-	if(name == "Log")
-		return new (std::nothrow) Log;	
-	return nullptr;
+
+	static PluginInfo pinfo = []{
+		auto p = PluginInfo("PluginA", "0.1-alpha");
+		p.registerClass<Exp>("Exp");
+		p.registerClass<Log>("Log");
+		return p;
+	}();
+	return &pinfo;
 }
+
 
 struct _DLLInit{
 	_DLLInit(){
