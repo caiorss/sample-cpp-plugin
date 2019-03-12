@@ -11,6 +11,10 @@ target_include_directories(main PUBLIC ".")
 # Note: the library ldl is necessary for the UNIX APIs dlopen,
 # dlclose, ... and so on
 target_link_libraries(main PRIVATE dl)
+set_target_properties(main PROPERTIES
+  SUFFIX ".bin"
+  )
+
 
 # >>> ---- Target: PluginA ----------------
 add_library(PluginA SHARED PluginA.cpp)
