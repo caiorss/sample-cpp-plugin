@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cmath>
 
-#include "factory.hpp"
+#include <psdk/factory.hpp>
 
 class IMathFunction
 {
