@@ -6,7 +6,7 @@
 class IMathFunction
 {
 public:
-	virtual pstring Name() const = 0;
+	virtual const char* Name() const = 0;
 	virtual double  Eval(double x) const = 0;	
 	virtual ~IMathFunction() = default;
 };
@@ -22,7 +22,7 @@ class Exp: public IMathFunction
 {
 public:
 	Exp() = default;
-	pstring Name() const {
+	const char* Name() const {
 		return "Exp";
 	}
 	double Eval(double x) const {
@@ -34,7 +34,7 @@ class Log: public IMathFunction
 {
 public:
 	Log() = default;
-	pstring Name() const {
+	const char* Name() const {
 		return "Log";
 	}
 	double Eval(double x) const {

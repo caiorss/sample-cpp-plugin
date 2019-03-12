@@ -4,7 +4,7 @@
 class IMathFunction
 {
 public:
-	virtual pstring Name() const = 0;
+	virtual const char* Name() const = 0;
 	virtual double  Eval(double x) const = 0;	
 	virtual ~IMathFunction() = default;
 };
