@@ -4,3 +4,5 @@
 *.il
 *.dll
 build/*
+bin/*
+build*/*
