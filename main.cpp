@@ -22,6 +22,7 @@ class Plugin
 public:
 	void* m_hnd = nullptr;
 	std::string m_file = "";
+	bool m_isLoaded    = false;
 
 	Plugin(){}
 
@@ -29,6 +30,7 @@ public:
 	{
 		m_file = std::move(file);
 		m_hnd = ::dlopen(m_file.c_str(), RTLD_LAZY);
+		m_isLoaded = true;
 		assert(m_hnd != nullptr);
 	}
 
@@ -41,21 +43,29 @@ public:
 
 	Plugin(Plugin&& rhs) 
 	{
-		m_hnd = std::move(rhs.m_hnd);
-		m_file = std::move(rhs.m_file);
+		m_isLoaded	= std::move(rhs.m_isLoaded);
+		m_hnd		= std::move(rhs.m_hnd);
+		m_file		= std::move(rhs.m_file);
 	} 
 	Plugin& operator=(Plugin&& rhs)
 	{
+		std::swap(rhs.m_isLoaded, m_isLoaded);
 		std::swap(rhs.m_hnd,  m_hnd);
 		std::swap(rhs.m_file, m_file);
 		return *this;
 	} 
+
+	bool isLoaded() const
+	{
+		return m_isLoaded;
+	}
 	
 	void Unload()
 	{
 		if(m_hnd != nullptr) {
 			::dlclose(m_hnd);
 			m_hnd = nullptr;
+			m_isLoaded = false;
 		}
 	}
 	void* GetSymbol(std::string const& name)
