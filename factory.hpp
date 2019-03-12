@@ -4,7 +4,6 @@
 #include <string> 
 #include <functional>
 #include <map> 
-
 #include "interfaces.hpp"
 
 class PluginInfo: public IPluginInfo

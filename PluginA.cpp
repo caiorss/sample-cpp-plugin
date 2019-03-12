@@ -3,6 +3,15 @@
 
 #include "factory.hpp"
 
+class IMathFunction
+{
+public:
+	virtual pstring Name() const = 0;
+	virtual double  Eval(double x) const = 0;	
+	virtual ~IMathFunction() = default;
+};
+
+
 // Forward declarations 
 // class Exp; // : public IMathFunction;
 // class Log; // : public IMathFunction;
