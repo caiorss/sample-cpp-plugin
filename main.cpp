@@ -121,10 +121,19 @@ public:
 		return ext;
 	}
 
-	void addPlugin(const std::string& name)
+	Plugin& addPlugin(const std::string& name)
 	{	  		
 		std::string fileName = name + GetExtension();
-		m_plugindb[name] = Plugin(fileName);		
+		m_plugindb[name] = Plugin(fileName);
+		return m_plugindb[name];
+	}
+
+	IPluginInfo* GetPluginInfo(const char* pluginName)
+	{
+		auto it = m_plugindb.find(pluginName);
+		if(it == m_plugindb.end())
+			return nullptr;
+		return it->second.GetInfo();
 	}
 
 	void* GetObject(std::string pluginName, std::string className)
@@ -132,15 +141,7 @@ public:
 		auto it = m_plugindb.find(pluginName);
 		if(it == m_plugindb.end())
 			return nullptr;		
-		// Type signature of plugin entry-point function (factory function)
-		using Function_t = void* (*) (const char* className);
-		// Try get plugin factory function 
-		auto factoryFunction =
-			reinterpret_cast<Function_t>(it->second.GetSymbol("factoryFunction"));
-		if(factoryFunction == nullptr)
-			return nullptr;
-		// Execute DLL entry-point 
-		return factoryFunction(className.c_str());
+		return it->second.GetObject(className);
 	}
 
 	template<typename T>
@@ -151,7 +152,7 @@ public:
 		return std::shared_ptr<T>(reinterpret_cast<T*>(pObj));
 	}
 	
-};
+}; /* --- End of class PluginManager --- */
 
 
 
