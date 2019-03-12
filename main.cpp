@@ -13,7 +13,7 @@ public:
 int main()
 {
 	PluginManager ma;
-	IPluginInfo* infoA = ma.addPlugin("PluginA");
+	IPluginFactory* infoA = ma.addPlugin("PluginA");
 	// * infoA = ma.GetPluginInfo("PluginA");
 	assert(infoA != nullptr);
 	

@@ -18,7 +18,7 @@
   #define PSDK_PLUGIN_EXPORT_C extern "C" __attribute__ ((visibility ("default")))
 #endif 
 
-class PluginInfo: public IPluginInfo
+class PluginInfo: public IPluginFactory
 {
 	// Constructor database
 	using CtorItem = std::pair<std::string, std::function<void* ()>>;

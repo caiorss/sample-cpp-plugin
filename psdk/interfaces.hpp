@@ -2,7 +2,7 @@
 #define _INTERFACES_HPP_
 
 
-struct IPluginInfo{
+struct IPluginFactory{
 	/** Get Plugin Name */
 	virtual const char* Name() const = 0 ;
 	/** Get Plugin Version */

@@ -26,12 +26,12 @@ class Plugin
 {	
 public:
 	// Function pointer to DLL entry-point
-	using GetPluginInfo_fp = IPluginInfo* (*) ();
+	using GetPluginInfo_fp = IPluginFactory* (*) ();
 
 	void*        m_hnd		= nullptr;
 	std::string  m_file		= "";
 	bool         m_isLoaded = false;
-	IPluginInfo* m_info     = nullptr;
+	IPluginFactory* m_info     = nullptr;
 
 	Plugin()
 	{
@@ -82,7 +82,7 @@ public:
 		return *this;
 	}
 
-	IPluginInfo* GetInfo() const
+	IPluginFactory* GetInfo() const
 	{
 		return m_info;
 	}
@@ -136,14 +136,14 @@ public:
 		return ext;
 	}
 
-	IPluginInfo* addPlugin(const std::string& name)
+	IPluginFactory* addPlugin(const std::string& name)
 	{	  		
 		std::string fileName = name + GetExtension();
 		m_plugindb[name] = Plugin(fileName);
 		return m_plugindb[name].GetInfo();
 	}
 
-	IPluginInfo* GetPluginInfo(const char* pluginName)
+	IPluginFactory* GetPluginInfo(const char* pluginName)
 	{
 		auto it = m_plugindb.find(pluginName);
 		if(it == m_plugindb.end())
