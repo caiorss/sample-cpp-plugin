@@ -45,11 +45,11 @@ public:
 
 
 PSDK_PLUGIN_EXPORT_C
-auto GetPluginInfo() -> PluginInfo*
+auto GetPluginInfo() -> IPluginFactory*
 {
 
-	static PluginInfo pinfo = []{
-		auto p = PluginInfo("PluginA", "0.1-alpha");
+	static PluginFactory pinfo = []{
+		auto p = PluginFactory("PluginA", "0.1-alpha");
 		p.registerClass<Exp>("Exp");
 		p.registerClass<Log>("Log");
 		return p;

@@ -18,7 +18,7 @@
   #define PSDK_PLUGIN_EXPORT_C extern "C" __attribute__ ((visibility ("default")))
 #endif 
 
-class PluginInfo: public IPluginFactory
+class PluginFactory: public IPluginFactory
 {
 	// Constructor database
 	using CtorItem = std::pair<std::string, std::function<void* ()>>;
@@ -28,7 +28,7 @@ class PluginInfo: public IPluginFactory
 	CtorDB m_ctordb;	
 public:
 	
-	PluginInfo(const char* name, const char* version):
+	PluginFactory(const char* name, const char* version):
 		m_name(name),
 		m_version(version)
 	{
@@ -68,7 +68,7 @@ public:
 	}
 
 	template<typename AClass>
-	PluginInfo& registerClass(std::string const& name)
+	PluginFactory& registerClass(std::string const& name)
 	{
 		auto constructor = []{ return new (std::nothrow) AClass; };
 		m_ctordb.push_back(std::make_pair(name, constructor));
