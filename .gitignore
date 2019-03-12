@@ -1,0 +1,5 @@
+*.bin
+*.so
+*.exe
+*.il
+*.dll
