@@ -160,6 +160,10 @@ int main()
 {
 	PluginManager ma;
 	ma.addPlugin("PluginA");
+	IPluginInfo* infoA = ma.GetPluginInfo("PluginA");
+	assert(infoA != nullptr);
+
+	std::cout << " => ma.Name =  " << infoA->Name() << " - Version = " << infoA->Version() << "\n";
 
 	// Type of pExp: std::shared_ptr<IMathFunction>
 	auto pExp = ma.GetObjectAs<IMathFunction>("PluginA", "Exp");
