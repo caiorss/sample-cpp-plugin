@@ -13,12 +13,24 @@ public:
 int main()
 {
 	PluginManager ma;
-	ma.addPlugin("PluginA");
-	IPluginInfo* infoA = ma.GetPluginInfo("PluginA");
+	IPluginInfo* infoA = ma.addPlugin("PluginA");
+	// * infoA = ma.GetPluginInfo("PluginA");
 	assert(infoA != nullptr);
+	
+	std::cout << " ---- Plugin Information --------- " << "\n"
+			  << "  =>              Name = " << infoA->Name() << "\n"
+			  << "  =>           Version = " << infoA->Version() << "\n"
+			  << "  => Number of classes = " << infoA->NumberOfClasses()
+			  << "\n\n";
 
-	std::cout << " => ma.Name =  " << infoA->Name() << " - Version = " << infoA->Version() << "\n";
+	std::cout << "Classes exported by the Plugin: (PluginA) " << "\n";
 
+	for(size_t n = 0; n < infoA->NumberOfClasses(); n++)
+	{
+		std::cout << " -> Exported Class: " << infoA->GetClassName(n) << "\n";
+	}
+	
+	
 	// Type of pExp: std::shared_ptr<IMathFunction>
 	auto pExp = ma.GetObjectAs<IMathFunction>("PluginA", "Exp");
 	assert(pExp != nullptr);

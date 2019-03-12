@@ -131,11 +131,11 @@ public:
 		return ext;
 	}
 
-	Plugin& addPlugin(const std::string& name)
+	IPluginInfo* addPlugin(const std::string& name)
 	{	  		
 		std::string fileName = name + GetExtension();
 		m_plugindb[name] = Plugin(fileName);
-		return m_plugindb[name];
+		return m_plugindb[name].GetInfo();
 	}
 
 	IPluginInfo* GetPluginInfo(const char* pluginName)
