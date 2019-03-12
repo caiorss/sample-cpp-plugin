@@ -35,12 +35,22 @@ public:
 	explicit Plugin(std::string file)
 	{
 		m_file = std::move(file);
-		m_hnd = ::dlopen(m_file.c_str(), RTLD_LAZY);
+        #if !defined(_WIN32)
+		  m_hnd = ::dlopen(m_file.c_str(), RTLD_LAZY);
+		#else
+		  m_hnd  = (void*) ::LoadLibraryA(m_file.c_str());
+        #endif 
 		m_isLoaded = true;
 		assert(m_hnd != nullptr);
-
-		auto dllEntryPoint = reinterpret_cast<GetPluginInfo_fp>(dlsym(m_hnd, "GetPluginInfo"));
+        #if !defined(_WIN32)
+		  auto dllEntryPoint =
+			  reinterpret_cast<GetPluginInfo_fp>(dlsym(m_hnd, "GetPluginInfo"));
+		#else
+		  auto dllEntryPoint =
+			  reinterpret_cast<GetPluginInfo_fp>(GetProcAddress((HMODULE) m_hnd, "GetPluginInfo"));
+        #endif 
 		assert(dllEntryPoint != nullptr);
+		// Retrieve plugin metadata from DLL entry-point function 
 		m_info = dllEntryPoint();
 	}
 
@@ -85,14 +95,14 @@ public:
 	void Unload()
 	{
 		if(m_hnd != nullptr) {
-			::dlclose(m_hnd);
+            #if !defined(_WIN32)
+			   ::dlclose(m_hnd);
+			#else
+			   ::FreeLibrary((HMODULE) m_hnd);
+			#endif 
 			m_hnd = nullptr;
 			m_isLoaded = false;
 		}
-	}
-	void* GetSymbol(std::string const& name)
-	{
-		return ::dlsym(m_hnd, name.c_str());
 	}
 };
 
