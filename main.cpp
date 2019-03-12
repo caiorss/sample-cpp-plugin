@@ -32,13 +32,13 @@ int main()
 	
 	
 	// Type of pExp: std::shared_ptr<IMathFunction>
-	auto pExp = ma.GetObjectAs<IMathFunction>("PluginA", "Exp");
+	auto pExp = ma.CreateInstanceAs<IMathFunction>("PluginA", "Exp");
 	assert(pExp != nullptr);
 	
 	std::cout << "pExp->Name()    = " << pExp->Name() << "\n";
 	std::cout << "pExp->Eval(3.0) = " << pExp->Eval(3.0) << "\n";
 	
-	auto pLog = ma.GetObjectAs<IMathFunction>("PluginA", "Log");
+	auto pLog = ma.CreateInstanceAs<IMathFunction>("PluginA", "Log");
 	std::cout << "pLog->Name()    = " << pLog->Name() << "\n";
 	std::cout << "pLog->Eval(3.0) = " << pLog->Eval(3.0) << "\n";
 	

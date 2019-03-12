@@ -9,13 +9,18 @@
 
 // Unix
 #if defined(_WIN32)
-  #include <windows.h>
+   #include <windows.h>
 #elif defined(__unix__)
   // APIs: dlopen, dlclose, dlopen 
   #include <dlfcn.h>
 #else
   #error "Not supported operating system"
 #endif 
+
+#ifdef GetClassName 
+  #undef GetClassName 
+#endif
+
 
 class Plugin
 {	
@@ -82,7 +87,7 @@ public:
 		return m_info;
 	}
 
-	void* GetObject(std::string const& className)
+	void* CreateInstance(std::string const& className)
 	{
 		return m_info->Factory(className.c_str());
 	}
@@ -146,19 +151,19 @@ public:
 		return it->second.GetInfo();
 	}
 
-	void* GetObject(std::string pluginName, std::string className)
+	void* CreateInstance(std::string pluginName, std::string className)
 	{
 		auto it = m_plugindb.find(pluginName);
 		if(it == m_plugindb.end())
 			return nullptr;		
-		return it->second.GetObject(className);
+		return it->second.CreateInstance(className);
 	}
 
 	template<typename T>
 	std::shared_ptr<T>
-	GetObjectAs(std::string pluginName, std::string className)
+	CreateInstanceAs(std::string pluginName, std::string className)
 	{
-		void* pObj = GetObject(std::move(pluginName), std::move(className));
+		void* pObj = CreateInstance(std::move(pluginName), std::move(className));
 		return std::shared_ptr<T>(reinterpret_cast<T*>(pObj));
 	}
 	
