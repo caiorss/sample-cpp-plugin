@@ -20,10 +20,14 @@
 
 class PluginFactory: public IPluginFactory
 {
-	// Constructor database
+	/** Contains the pair <ClassName, Constructor Function  **/
 	using CtorItem = std::pair<std::string, std::function<void* ()>>;
+	// Constructor database
 	using CtorDB = std::vector<CtorItem>;
+	
+	/** Plugin name */
 	std::string m_name;
+	/** Plugin version */
 	std::string m_version;	
 	CtorDB m_ctordb;	
 public:
@@ -46,6 +50,7 @@ public:
 		return m_version.data();
 	}
 
+    /** Get number of classes exported by the plugin */
 	virtual size_t NumberOfClasses() const
 	{
 		return m_ctordb.size();
@@ -55,7 +60,10 @@ public:
 		return m_ctordb[index].first.data();
 	}
 	
-	/** Instantiate a class from its name */
+	/** Instantiate a class from its name.
+	 * This member function returns a type-erased pointer
+	 * to a class object allocated on the heap.
+     */
 	void* Factory(const char* className) const
 	{
 		auto it = std::find_if(m_ctordb.begin(), m_ctordb.end(),
@@ -67,6 +75,7 @@ public:
 		return it->second();
 	}
 
+	/** Register class name and constructor in the plugin database */
 	template<typename AClass>
 	PluginFactory& registerClass(std::string const& name)
 	{
