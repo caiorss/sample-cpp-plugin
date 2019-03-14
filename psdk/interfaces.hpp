@@ -1,7 +1,7 @@
 #ifndef _INTERFACES_HPP_
 #define _INTERFACES_HPP_
 
-
+/** @brief Interface class that provides plugin's metadata and instantiate exported classes */
 struct IPluginFactory{
 	/** Get Plugin Name */
 	virtual const char* Name() const = 0 ;

@@ -18,6 +18,10 @@
   #define PSDK_PLUGIN_EXPORT_C extern "C" __attribute__ ((visibility ("default")))
 #endif 
 
+/** @brief Concrete implementation of the interface IPluginFactory.
+ * An instance of this class is supposed to be exported by the plugin
+ * entry-point function
+ */
 class PluginFactory: public IPluginFactory
 {
 	/** Contains the pair <ClassName, Constructor Function  **/

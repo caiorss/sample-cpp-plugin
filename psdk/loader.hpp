@@ -21,7 +21,7 @@
   #undef GetClassName 
 #endif
 
-/** Class form managing and encapsulating shared libraries loading  */
+/** @brief Class form managing and encapsulating shared libraries loading  */
 class Plugin
 {	
 public:
@@ -119,6 +119,9 @@ public:
 	}
 };
 
+/** @brief Repository of plugins.
+ * It can instantiate any class from any loaded plugin by its name.
+ **/
 class PluginManager
 {
 public:
@@ -159,6 +162,13 @@ public:
 		return it->second.GetInfo();
 	}
 
+	/** @brief Instantiate some class exported by some plugin.
+	 *  @details
+	 *  This member function returns a pointer to the object
+	 *  casted as void pointer.  It is responsibility of the caller to
+	 *  cast the return pointer to a proper interface implemented by
+	 *  the loaded class.
+	 **/		
 	void* CreateInstance(std::string pluginName, std::string className)
 	{
 		auto it = m_plugindb.find(pluginName);
@@ -167,6 +177,12 @@ public:
 		return it->second.CreateInstance(className);
 	}
 
+	/** @brief Instantiate a class exported by some loaded plugin.
+	 *  @tparam T           Interface (interface class) implemented by the loaded class.
+	 *  @param  pluginName  Name of the plugin that exports the class.
+	 *  @param  className   Name of the class exported by the plugin. 
+     *  @return             Instance of exported class casted to some interface T.
+	 * */
 	template<typename T>
 	std::shared_ptr<T>
 	CreateInstanceAs(std::string pluginName, std::string className)
