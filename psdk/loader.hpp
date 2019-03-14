@@ -25,20 +25,18 @@
 class Plugin
 {	
 public:
-	/** Function pointer to DLL entry-point */
+	/** @brief Function pointer to DLL entry-point */
 	using GetPluginInfo_fp = IPluginFactory* (*) ();
-	/** Name of DLL entry point that a Plugin should export */
+	/** @brief Name of DLL entry point that a Plugin should export */
 	static constexpr const char* DLLEntryPointName = "GetPluginFactory";
 	
-	/** Shared library handle */
+	/** @brief Shared library handle */
 	void*        m_hnd		= nullptr;
-	/** Shared library file name */
+	/** @brief Shared library file name */
 	std::string  m_file		= "";
-	/** Flag to indicate whether plugin (shared library) is loaded into current process. */
+	/** @brief Flag to indicate whether plugin (shared library) is loaded into current process. */
 	bool         m_isLoaded = false;
-	/** Pointer to shared library factory class returned by the DLL
-	 * entry-point function 
-     */
+	/** @brief Pointer to shared library factory class returned by the DLL entry-point function */
 	IPluginFactory* m_info  = nullptr;
 
 	Plugin()
