@@ -21,17 +21,25 @@
   #undef GetClassName 
 #endif
 
-
+/** Class form managing and encapsulating shared libraries loading  */
 class Plugin
 {	
 public:
-	// Function pointer to DLL entry-point
+	/** Function pointer to DLL entry-point */
 	using GetPluginInfo_fp = IPluginFactory* (*) ();
-
+	/** Name of DLL entry point that a Plugin should export */
+	static constexpr const char* DLLEntryPointName = "GetPluginFactory";
+	
+	/** Shared library handle */
 	void*        m_hnd		= nullptr;
+	/** Shared library file name */
 	std::string  m_file		= "";
+	/** Flag to indicate whether plugin (shared library) is loaded into current process. */
 	bool         m_isLoaded = false;
-	IPluginFactory* m_info     = nullptr;
+	/** Pointer to shared library factory class returned by the DLL
+	 * entry-point function 
+     */
+	IPluginFactory* m_info  = nullptr;
 
 	Plugin()
 	{
@@ -49,10 +57,10 @@ public:
 		assert(m_hnd != nullptr);
         #if !defined(_WIN32)
 		  auto dllEntryPoint =
-			  reinterpret_cast<GetPluginInfo_fp>(dlsym(m_hnd, "GetPluginFactory"));
+			  reinterpret_cast<GetPluginInfo_fp>(dlsym(m_hnd, DLLEntryPointName));
 		#else
 		  auto dllEntryPoint =
-			  reinterpret_cast<GetPluginInfo_fp>(GetProcAddress((HMODULE) m_hnd, "GetPluginFactory"));
+			  reinterpret_cast<GetPluginInfo_fp>(GetProcAddress((HMODULE) m_hnd, DLLEntryPointName));
         #endif 
 		assert(dllEntryPoint != nullptr);
 		// Retrieve plugin metadata from DLL entry-point function 
